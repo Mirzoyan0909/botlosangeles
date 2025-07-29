@@ -1,7 +1,6 @@
 import logging
 import re
 import pathlib
-import nest_asyncio
 
 from telegram import Update, MessageEntity
 from telegram.ext import (
@@ -9,8 +8,6 @@ from telegram.ext import (
 )
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from pytz import timezone
-
-nest_asyncio.apply()
 
 logging.basicConfig(level=logging.INFO)
 
@@ -21,7 +18,7 @@ BASE_DIR = pathlib.Path(__file__).parent.resolve()
 AD_IMAGE_PATH = BASE_DIR / "ad_banner.jpg"
 
 CUSTOM_EMOJI_IDS = ["5206607081334906820", "5355012477883004708"]
-PREMIUM_ADMINS = [123456789]  # Замени на свои user_id
+PREMIUM_ADMINS = [123456789]  # Заменить на свои user_id
 
 first_law_text = (
     "🔔 Ուշադրություն 🔔  \n"
@@ -148,8 +145,6 @@ async def main():
     app.add_handler(MessageHandler(filters.TEXT | filters.Caption, handle_message))
 
     scheduler = AsyncIOScheduler(timezone=timezone("Asia/Yerevan"))
-
-    # Запланировать рассылку в 9:00 по Еревану
     scheduler.add_job(lambda: scheduled_publish_first_law(app), "cron", hour=9, minute=0)
     scheduler.start()
 
@@ -158,10 +153,8 @@ async def main():
 
 if __name__ == "__main__":
     import asyncio
-
-    # Применяем патч для уже работающего event loop
     import nest_asyncio
+
     nest_asyncio.apply()
 
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
+    asyncio.run(main())

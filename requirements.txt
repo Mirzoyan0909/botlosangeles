@@ -1,4 +1,3 @@
-python-telegram-bot==22.3
+python-telegram-bot==20.6
 apscheduler
-nest_asyncio
 pytz
